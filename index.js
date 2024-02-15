@@ -20,9 +20,34 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
-});
+app.get('/api/:date', (req, res) => {
+  //Regex expression to test if input is a date string
+  if (/^[0-9]{4,}-[0-1][0-9]-[0-3][0-9]$/.test(req.params['date']))
+  {
+    let utcDate = new Date(req.params['date']).toUTCString();
+    let unixDate = new Date(req.params['date']).getTime();
+    if (utcDate === "Invalid Date") res.json({"error": "Invalid Date"})
+    else res.json({"unix": unixDate, "utc": utcDate});
+  }
+  //Regex expression to test if input is a unix timestamp
+  else if (/^-?[0-9]+$/.test(req.params['date']))
+  {
+    let unixDate = Number(req.params['date']);
+    let convertedDate = new Date(unixDate);
+    let utcDate = convertedDate.toUTCString();
+    res.json({"unix": unixDate, "utc": utcDate})
+  }
+  //Return an error if input does not follow above formats
+  else {
+      res.json({"error": "Invalid Date"})
+  }
+})
+//Return current time if no date string or unix timestamp is provided
+app.get('/api/', (req, res) => {
+  let utcDate = new Date().toUTCString();
+  let unixDate = new Date().getTime();
+  res.json({"unix": unixDate, "utc": utcDate});
+})
 
 
 
