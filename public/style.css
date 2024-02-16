@@ -18,6 +18,14 @@ body {
   align-items: center;
 }
 
+.flex-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 0.5rem;
+}
+
 h3 {
   margin-top: 30px;
 }
